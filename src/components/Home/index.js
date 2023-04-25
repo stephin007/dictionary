@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Box, Typography, FilledInput, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  FilledInput,
+  IconButton,
+  useTheme,
+} from "@mui/material";
 import {
   Search as SearchIcon,
   Bookmark as BookmarkIcon,
@@ -9,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const [word, setWord] = useState("");
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,11 +28,7 @@ const Home = () => {
     <div>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          justifyContent: "center",
-          height: "100vh",
+          ...theme.mixins.alignInTheCenter,
         }}
       >
         <img src='/assets/book.png' alt='book' />

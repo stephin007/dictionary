@@ -22,4 +22,13 @@ export default createTheme({
       fontWeight: 800,
     },
   },
+  mixins: {
+    alignInTheCenter: {
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "column",
+      justifyContent: "center",
+      height: "100vh",
+    },
+  },
 });

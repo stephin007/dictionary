@@ -6,11 +6,13 @@ import {
   IconButton,
   Divider,
   CircularProgress,
+  useTheme,
+  Button,
 } from "@mui/material";
 import {
   ArrowBack as BackIcon,
   BookmarkBorder as BookmarkIcon,
-  Border as BookmarkedIcon,
+  Bookmark as BookmarkedIcon,
   PlayArrow as PlayIcon,
 } from "@mui/icons-material";
 
@@ -20,19 +22,25 @@ import axios from "axios";
 const Definition = () => {
   const { word } = useParams();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const [definitions, setDefinitions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [exist, setExist] = useState(true);
 
   useEffect(() => {
     const fetchDefinitions = async () => {
-      const resp = await axios.get(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-      );
-      setDefinitions(resp.data);
-      setLoading(false);
+      try {
+        const resp = await axios.get(
+          `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+        );
+        setDefinitions(resp.data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setExist(false);
+      }
     };
-
     fetchDefinitions();
   }, []);
 
@@ -40,14 +48,34 @@ const Definition = () => {
     return (
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          justifyContent: "center",
-          height: "100vh",
+          ...theme.mixins.alignInTheCenter,
         }}
       >
         <CircularProgress />
+      </Box>
+    );
+
+  if (!exist)
+    return (
+      <Box
+        sx={{
+          ...theme.mixins.alignInTheCenter,
+        }}
+      >
+        <Typography>
+          Sorry pal, we couldn't find definitions for the word you are looking
+          for.
+        </Typography>
+        <Button
+          variant='contained'
+          sx={{
+            textTransform: "capitalize",
+            mt: "16px",
+          }}
+          onClick={() => navigate(-1)}
+        >
+          Go Back
+        </Button>
       </Box>
     );
 
@@ -55,10 +83,10 @@ const Definition = () => {
     <>
       <Stack direction='row' justifyContent='space-between'>
         <IconButton onClick={() => navigate(-1)}>
-          <BackIcon />
+          <BackIcon sx={{ color: "black" }} />
         </IconButton>
         <IconButton>
-          <BookmarkIcon />
+          <BookmarkIcon sx={{ color: "black" }} />
         </IconButton>
       </Stack>
       <Stack
