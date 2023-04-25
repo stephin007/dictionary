@@ -4,9 +4,19 @@ import {
   Search as SearchIcon,
   Bookmark as BookmarkIcon,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [word, setWord] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const trimmedWord = word.trim();
+    if (!trimmedWord || trimmedWord.split(" ").length > 1) return;
+    navigate(`/search/${trimmedWord}`);
+  };
+
   return (
     <div>
       <Box
