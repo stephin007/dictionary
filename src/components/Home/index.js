@@ -37,25 +37,26 @@ const Home = () => {
             width: "360px",
           }}
         >
-          <FilledInput
-            value={word}
-            onChange={(e) => setWord(e.target.value)}
-            sx={{
-              my: "32px",
-              backgroundColor: "white",
-              borderRadius: "16px",
-              boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.05)",
-              "& .MuiFilledInput-input": {
-                p: "16px",
-              },
-            }}
-            startAdornment={<SearchIcon color='disabled' />}
-            fullWidth
-            disableUnderline
-            placeholder='Search Word'
-          />
+          <form onSubmit={handleSubmit}>
+            <FilledInput
+              value={word}
+              onChange={(e) => setWord(e.target.value)}
+              sx={{
+                my: "32px",
+                backgroundColor: "white",
+                borderRadius: "16px",
+                boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.05)",
+                "& .MuiFilledInput-input": {
+                  p: "16px",
+                },
+              }}
+              startAdornment={<SearchIcon color='disabled' />}
+              fullWidth
+              disableUnderline
+              placeholder='Search Word'
+            />
+          </form>
         </Box>
-
         <IconButton
           sx={{
             borderRadius: "16px",
