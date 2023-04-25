@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box, Typography, FilledInput, IconButton } from "@mui/material";
 import {
   Search as SearchIcon,
@@ -5,6 +6,7 @@ import {
 } from "@mui/icons-material";
 
 const Home = () => {
+  const [word, setWord] = useState("");
   return (
     <div>
       <Box
@@ -36,6 +38,8 @@ const Home = () => {
           }}
         >
           <FilledInput
+            value={word}
+            onChange={(e) => setWord(e.target.value)}
             sx={{
               my: "32px",
               backgroundColor: "white",
