@@ -20,7 +20,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Definition = () => {
+const Definition = ({ bookmarks, addBookmark, removeBookmark }) => {
   const { word } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -29,6 +29,8 @@ const Definition = () => {
   const [loading, setLoading] = useState(true);
   const [exist, setExist] = useState(true);
   const [audio, setAudio] = useState(null);
+
+  const isBookmarked = Object.keys(bookmarks).includes(word);
 
   useEffect(() => {
     const fetchDefinitions = async () => {
@@ -94,8 +96,16 @@ const Definition = () => {
         <IconButton onClick={() => navigate(-1)}>
           <BackIcon sx={{ color: "black" }} />
         </IconButton>
-        <IconButton>
-          <BookmarkIcon sx={{ color: "black" }} />
+        <IconButton
+          onClick={() =>
+            isBookmarked ? removeBookmark(word) : addBookmark(word, definitions)
+          }
+        >
+          {isBookmarked ? (
+            <BookmarkedIcon sx={{ color: "black" }} />
+          ) : (
+            <BookmarkIcon sx={{ color: "black" }} />
+          )}
         </IconButton>
       </Stack>
       <Stack

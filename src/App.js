@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import theme from "./theme";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline, Grid } from "@mui/material";
@@ -8,6 +9,23 @@ import Bookmarks from "./components/Bookmarks";
 import Definition from "./components/Definition";
 
 const App = () => {
+  const [bookmarks, setBookmarks] = useState(
+    JSON.parse(localStorage.getItem("bookmarks")) || {}
+  );
+  useEffect(() => {
+    localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+  }, [bookmarks]);
+
+  const addBookmark = (word, definitions) =>
+    setBookmarks((oldBookmarks) => ({ ...oldBookmarks, [word]: definitions }));
+
+  const removeBookmark = (word) =>
+    setBookmarks((oldBookmarks) => {
+      const temp = { ...oldBookmarks };
+      delete temp[word];
+      return temp;
+    });
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -17,7 +35,16 @@ const App = () => {
             <Routes>
               <Route exact path='/' element={<Home />} />
               <Route path='/bookmarks' element={<Bookmarks />} />
-              <Route path='/search/:word' element={<Definition />} />
+              <Route
+                path='/search/:word'
+                element={
+                  <Definition
+                    bookmarks={bookmarks}
+                    addBookmark={addBookmark}
+                    removeBookmark={removeBookmark}
+                  />
+                }
+              />
             </Routes>
           </Router>
         </Grid>
