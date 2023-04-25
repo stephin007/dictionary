@@ -1,4 +1,5 @@
-import { Stack, Typography, Box, IconButton } from "@mui/material";
+import { useState, useEffect, Fragment } from "react";
+import { Stack, Typography, Box, IconButton, Divider } from "@mui/material";
 import {
   ArrowBack as BackIcon,
   BookmarkBorder as BookmarkIcon,
@@ -6,14 +7,30 @@ import {
   PlayArrow as PlayIcon,
 } from "@mui/icons-material";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Definition = () => {
   const { word } = useParams();
+  const navigate = useNavigate();
+
+  const [definitions, setDefinitions] = useState([]);
+
+  useEffect(() => {
+    const fetchDefinitions = async () => {
+      const resp = await axios.get(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+      );
+      setDefinitions(resp.data);
+    };
+
+    fetchDefinitions();
+  }, []);
+
   return (
     <>
       <Stack direction='row' justifyContent='space-between'>
-        <IconButton>
+        <IconButton onClick={() => navigate(-1)}>
           <BackIcon />
         </IconButton>
         <IconButton>
@@ -54,6 +71,48 @@ const Definition = () => {
           <PlayIcon />
         </IconButton>
       </Stack>
+
+      {definitions.map((def, index) => (
+        <Fragment key={index}>
+          <Divider
+            sx={{
+              display: index === 0 ? "none" : "block",
+              my: "24px",
+            }}
+          />
+          {def.meanings.map((meaning) => (
+            <Box
+              key={meaning.partOfSpeech}
+              sx={{
+                boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.05)",
+                backgroundColor: "#fff",
+                p: "16px",
+                borderRadius: "16px",
+                mt: "40px",
+              }}
+            >
+              <Typography
+                sx={{ textTransform: "capitalize" }}
+                color='GrayText'
+                variant='subtitle1'
+              >
+                {meaning.partOfSpeech}
+              </Typography>
+              {meaning.definitions.map((definition, index) => (
+                <Typography
+                  key={definition.definition}
+                  sx={{ my: "8px" }}
+                  color='GrayText'
+                  variant='body2'
+                >
+                  {meaning.definitions.length > 1 && `${index + 1}.`}
+                  {definition.definition}
+                </Typography>
+              ))}
+            </Box>
+          ))}
+        </Fragment>
+      ))}
     </>
   );
 };
