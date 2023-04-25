@@ -32,26 +32,31 @@ const Definition = ({ bookmarks, addBookmark, removeBookmark }) => {
 
   const isBookmarked = Object.keys(bookmarks).includes(word);
 
+  const updateState = (data) => {
+    setDefinitions(data);
+    setLoading(false);
+
+    const phonetics = data[0].phonetics;
+    if (!phonetics.length) return;
+
+    const url = phonetics[0].audio;
+    setAudio(new Audio(url));
+  };
+
   useEffect(() => {
     const fetchDefinitions = async () => {
       try {
         const resp = await axios.get(
           `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
         );
-        setDefinitions(resp.data);
-        setLoading(false);
-
-        const phonetics = resp.data[0].phonetics;
-        if (!phonetics.length) return;
-
-        const url = phonetics[0].audio;
-        setAudio(new Audio(url));
+        updateState(resp.data);
       } catch (err) {
         setLoading(false);
         setExist(false);
       }
     };
-    fetchDefinitions();
+    if (!isBookmarked) fetchDefinitions();
+    else updateState(bookmarks[word]);
     // eslint-disable-next-line
   }, []);
 

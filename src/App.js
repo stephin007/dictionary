@@ -34,7 +34,10 @@ const App = () => {
           <Router>
             <Routes>
               <Route exact path='/' element={<Home />} />
-              <Route path='/bookmarks' element={<Bookmarks />} />
+              <Route
+                path='/bookmarks'
+                element={<Bookmarks bookmarks={bookmarks} />}
+              />
               <Route
                 path='/search/:word'
                 element={

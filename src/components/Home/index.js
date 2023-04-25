@@ -10,7 +10,7 @@ import {
   Search as SearchIcon,
   Bookmark as BookmarkIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [word, setWord] = useState("");
@@ -70,7 +70,10 @@ const Home = () => {
             />
           </form>
         </Box>
+
         <IconButton
+          to='/bookmarks'
+          component={Link}
           sx={{
             borderRadius: "16px",
             p: "16px",
