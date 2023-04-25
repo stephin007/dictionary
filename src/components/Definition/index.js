@@ -12,6 +12,7 @@ import {
 import {
   ArrowBack as BackIcon,
   BookmarkBorder as BookmarkIcon,
+  // eslint-disable-next-line
   Bookmark as BookmarkedIcon,
   PlayArrow as PlayIcon,
 } from "@mui/icons-material";
@@ -27,6 +28,7 @@ const Definition = () => {
   const [definitions, setDefinitions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [exist, setExist] = useState(true);
+  const [audio, setAudio] = useState(null);
 
   useEffect(() => {
     const fetchDefinitions = async () => {
@@ -36,12 +38,19 @@ const Definition = () => {
         );
         setDefinitions(resp.data);
         setLoading(false);
+
+        const phonetics = resp.data[0].phonetics;
+        if (!phonetics.length) return;
+
+        const url = phonetics[0].audio;
+        setAudio(new Audio(url));
       } catch (err) {
         setLoading(false);
         setExist(false);
       }
     };
     fetchDefinitions();
+    // eslint-disable-next-line
   }, []);
 
   if (loading)
@@ -112,16 +121,19 @@ const Definition = () => {
         >
           {word}
         </Typography>
-        <IconButton
-          sx={{
-            borderRadius: "16px",
-            p: "8px",
-            color: "#fff",
-            background: (theme) => theme.palette.pink,
-          }}
-        >
-          <PlayIcon />
-        </IconButton>
+        {audio && (
+          <IconButton
+            onClick={() => audio.play()}
+            sx={{
+              borderRadius: "16px",
+              p: "8px",
+              color: "#fff",
+              background: (theme) => theme.palette.pink,
+            }}
+          >
+            <PlayIcon />
+          </IconButton>
+        )}
       </Stack>
 
       {definitions.map((def, index) => (
