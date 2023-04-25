@@ -12,7 +12,7 @@ const Home = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const trimmedWord = word.trim();
+    const trimmedWord = word.trim().toLowerCase();
     if (!trimmedWord || trimmedWord.split(" ").length > 1) return;
     navigate(`/search/${trimmedWord}`);
   };
@@ -72,8 +72,7 @@ const Home = () => {
             borderRadius: "16px",
             p: "16px",
             color: "#fff",
-            background:
-              "linear-gradient(138.72deg, #DC8295 0%, #DC687C 95.83%)",
+            background: (theme) => theme.palette.pink,
             boxShadow: "0px 10px 10px rgba(221, 114, 133, 0.2)",
           }}
         >
