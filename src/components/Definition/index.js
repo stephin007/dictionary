@@ -1,5 +1,12 @@
 import { useState, useEffect, Fragment } from "react";
-import { Stack, Typography, Box, IconButton, Divider } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  Box,
+  IconButton,
+  Divider,
+  CircularProgress,
+} from "@mui/material";
 import {
   ArrowBack as BackIcon,
   BookmarkBorder as BookmarkIcon,
@@ -15,6 +22,7 @@ const Definition = () => {
   const navigate = useNavigate();
 
   const [definitions, setDefinitions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDefinitions = async () => {
@@ -22,10 +30,26 @@ const Definition = () => {
         `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
       );
       setDefinitions(resp.data);
+      setLoading(false);
     };
 
     fetchDefinitions();
   }, []);
+
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <>
