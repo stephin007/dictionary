@@ -37,6 +37,7 @@ const Definition = ({ bookmarks, addBookmark, removeBookmark }) => {
     setLoading(false);
 
     const phonetics = data[0].phonetics;
+    console.log(phonetics);
     if (!phonetics.length) return;
 
     const url = phonetics[0].audio;
@@ -50,6 +51,7 @@ const Definition = ({ bookmarks, addBookmark, removeBookmark }) => {
           `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
         );
         updateState(resp.data);
+        console.log(resp.data);
       } catch (err) {
         setLoading(false);
         setExist(false);
